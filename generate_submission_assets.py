@@ -86,37 +86,55 @@ def build_report_pdf():
     path = DOCS / "Technical_Report_339919905.pdf"
     doc = SimpleDocTemplate(str(path), pagesize=A4, leftMargin=1.6 * cm, rightMargin=1.6 * cm, topMargin=1.5 * cm, bottomMargin=1.5 * cm)
     story = []
-    def bullets(items):
-        return ListFlowable([ListItem(Paragraph(i, styles["BodySmall"])) for i in items], bulletType="bullet", leftIndent=14)
+    def bullets(items, style_name="BodySmall"):
+        return ListFlowable([ListItem(Paragraph(i, styles[style_name])) for i in items], bulletType="bullet", leftIndent=14)
     story.append(Paragraph("Task Management API Technical Report", styles["TitleCenter"]))
-    story.append(Paragraph("Course Code: XJCO3011 | Student ID: 339919905 | Submission Type: Coursework 1", styles["BodySmall"]))
+    story.append(Paragraph("Course Code: XJCO3011 | Student ID: 339919905 | Coursework 1 Submission", styles["BodySmall"]))
     story.append(Paragraph("GitHub Repository: https://github.com/339919905/web-api-project", styles["BodySmall"]))
-    story.append(Spacer(1, 0.4 * cm))
-    story.append(Paragraph("1. Introduction and Project Overview", styles["Heading1"]))
-    story.append(Paragraph("This project implements a data-driven Web API for task management using Python and FastAPI. The aim is to provide a complete CRUD interface backed by a relational database while following RESTful conventions, returning JSON data, and exposing interactive API documentation. The chosen data model is a task entity with fields for title, description, completion status, due date, and audit timestamps.", styles["BodySmall"]))
-    story.append(Paragraph("2. Technology Selection and Architecture", styles["Heading1"]))
-    story.append(Paragraph("FastAPI was selected because it provides concise endpoint definitions, automatic OpenAPI generation, and strong support for typed request validation. SQLAlchemy was used as the ORM layer to model the task table and manage database operations in a structured way. SQLite was chosen for local development because it is lightweight, simple to configure, and suitable for coursework demonstrations. Pydantic was used to validate request bodies and shape response models.", styles["BodySmall"]))
-    story.append(Paragraph("The architecture follows a simple layered pattern: client requests are handled by FastAPI routes, validated by Pydantic schemas, executed through SQLAlchemy sessions, and persisted in SQLite. The modular structure separates routing, schema definitions, application startup, database configuration, and automated testing.", styles["BodySmall"]))
-    story.append(Paragraph("3. Implementation Details and Core Functionality", styles["Heading1"]))
-    story.append(Paragraph("The system provides complete CRUD operations for the task resource. Users can create new tasks, retrieve all tasks, retrieve an individual task by its identifier, replace records with PUT, partially update records with PATCH, and delete tasks. In addition to the minimum coursework requirements, the API includes pagination, title search, completion-state filtering, standardized JSON error handling, and created_at / updated_at timestamps.", styles["BodySmall"]))
+    story.append(Spacer(1, 0.35 * cm))
+    story.append(Paragraph("1. Introduction", styles["Heading1"]))
+    story.append(Paragraph("This project implements a data-driven Web API for task management using Python and FastAPI. The goal was to build a maintainable backend system that satisfies the coursework requirements for CRUD functionality, database integration, structured JSON responses, appropriate HTTP status codes, and interactive API documentation. The selected data model is a task entity containing a title, description, completion state, due date, and timestamp metadata.", styles["BodySmall"]))
+    story.append(Paragraph("2. Technology Selection and System Architecture", styles["Heading1"]))
+    story.append(Paragraph("FastAPI was chosen because it enables rapid API development, automatic Swagger/OpenAPI generation, and strongly typed endpoint definitions. SQLAlchemy was selected as the ORM because it provides a structured and scalable way to define models and interact with relational data. SQLite was used for persistence because it is lightweight and easy to configure for coursework development. Pydantic was used to validate request bodies and ensure that API responses follow predictable schemas.", styles["BodySmall"]))
+    story.append(Paragraph("The architecture follows a simple layered design: clients send HTTP requests to the FastAPI application, request data is validated through Pydantic schemas, route handlers execute application logic, SQLAlchemy manages persistence, and SQLite stores the final records. The codebase is organised into dedicated files for startup configuration, routing, schema definitions, database modelling, automated testing, and documentation assets.", styles["BodySmall"]))
     story.append(bullets([
-        "GET / returns a health-style JSON response confirming that the API is running.",
-        "GET /api/tasks lists all tasks with page, limit, total, and items metadata.",
-        "GET /api/tasks/{task_id} retrieves one task by ID.",
-        "POST /api/tasks creates a new task and returns HTTP 201.",
-        "PUT /api/tasks/{task_id} replaces an existing task.",
-        "PATCH /api/tasks/{task_id} partially updates selected fields.",
-        "DELETE /api/tasks/{task_id} removes a task and returns a JSON message.",
-    ]))
-    story.append(Paragraph("4. Testing Strategy", styles["Heading1"]))
-    story.append(Paragraph("Automated tests were implemented with pytest and FastAPI's TestClient. The test suite uses a dedicated temporary SQLite database so that tests do not affect the development database. This isolation improves reliability and makes repeated test runs deterministic. The tests cover successful CRUD flows, pagination behaviour, filtering, timestamp presence, standardized validation errors, and missing-resource responses.", styles["BodySmall"]))
-    story.append(Paragraph("5. Project Reflection", styles["Heading1"]))
-    story.append(Paragraph("One key challenge in the project was balancing coursework simplicity with professional API design. To address this, the final implementation kept the core structure beginner-friendly while still introducing practical enhancements such as consistent error payloads, automated tests, and deployment support. Another challenge was presenting the development process clearly through version control. This was addressed by keeping the repository organised into logical commits that reflect the major implementation stages of the project.", styles["BodySmall"]))
-    story.append(Paragraph("There are still limitations. SQLite is effective for local coursework use, but a production deployment with higher concurrency would be better served by PostgreSQL. The current system also does not include authentication or user ownership of tasks. Future improvements could include JWT authentication, sorting options, Alembic database migrations, and CI automation.", styles["BodySmall"]))
-    story.append(Paragraph("6. Generative AI Use Statement", styles["Heading1"]))
-    story.append(Paragraph("Generative AI tools were used during the development of this coursework. AI assistance was used to help draft the initial FastAPI project structure, generate code patterns for CRUD endpoints, improve schema and database boilerplate, suggest testing approaches, support README documentation, and help plan a clearer staged development workflow for the repository. The final project was then reviewed, run locally, tested, adjusted for Windows-specific issues, and prepared for submission through manual verification and iterative refinement. The student remained responsible for understanding the code, validating behaviour, deciding what features to keep, and producing the final integrated submission.", styles["BodySmall"]))
-    story.append(Paragraph("7. Conclusion", styles["Heading1"]))
-    story.append(Paragraph("Overall, the project satisfies the core requirements of a data-driven Web API coursework submission. It demonstrates CRUD functionality, database integration, input validation, consistent JSON responses, OpenAPI documentation, testing, and structured project organization. Additional features such as pagination, filtering, timestamps, Docker support, and Git history refinement help position the submission above the minimum baseline.", styles["BodySmall"]))
+        "Client -> FastAPI application -> SQLAlchemy ORM -> SQLite database",
+        "main.py handles startup, middleware, and exception handlers",
+        "routers/items.py contains task-related CRUD operations",
+        "database.py defines the Task model and database session handling",
+        "schemas.py defines request and response validation rules",
+    ], "BodySmall"))
+    story.append(Paragraph("3. Implementation of Core Functionality", styles["Heading1"]))
+    story.append(Paragraph("The application delivers complete CRUD functionality for one data model, which is the central requirement of the coursework. Users can create tasks, retrieve all tasks, retrieve an individual task by identifier, fully update tasks with PUT, partially update selected fields with PATCH, and delete records. In addition to the minimum requirements, the API also includes pagination, title search, filtering by completion state, timestamp tracking, and consistent JSON error responses.", styles["BodySmall"]))
+    story.append(bullets([
+        "GET / returns a health-style response and documentation links",
+        "GET /api/tasks returns a paginated list with page, limit, total, and items",
+        "GET /api/tasks/{task_id} returns a single task or a 404 error",
+        "POST /api/tasks creates a task and returns HTTP 201",
+        "PUT /api/tasks/{task_id} fully replaces an existing task",
+        "PATCH /api/tasks/{task_id} supports partial updates",
+        "DELETE /api/tasks/{task_id} removes a task and returns a JSON confirmation message",
+    ], "BodySmall"))
+    story.append(Paragraph("4. Error Handling and Validation", styles["Heading1"]))
+    story.append(Paragraph("The API includes custom exception handlers so that validation errors, HTTP errors, and unexpected failures return a consistent JSON structure. This improves the professionalism of the system because API consumers receive predictable responses instead of mixed error formats. Request validation is handled through typed Pydantic schemas, missing resources return 404 errors, and successful creation requests return 201 status codes.", styles["BodySmall"]))
+    story.append(Paragraph("5. Testing Strategy", styles["Heading1"]))
+    story.append(Paragraph("Automated testing was implemented using pytest together with FastAPI's TestClient. A dedicated temporary SQLite database is created for the tests so that the development database is not modified during test execution. This isolation makes the tests repeatable and reliable. The current test suite validates the root endpoint, CRUD operations, filtering, pagination, timestamp fields, 404 behaviour, and invalid request handling.", styles["BodySmall"]))
+    story.append(Paragraph("6. Version Control and Development Process", styles["Heading1"]))
+    story.append(Paragraph("The repository was maintained with Git and published to GitHub. The commit history is organised into logical stages that reflect the major development steps of the project, including repository setup, schema and database work, endpoint implementation, sample data support, testing, deployment support, and final submission preparation. This staged history provides evidence of a structured development workflow.", styles["BodySmall"]))
+    story.append(bullets([
+        "8ca73e4 Initialize coursework API repository",
+        "a06c6a7 Add database configuration and task schemas",
+        "a7cf785 Implement CRUD task API endpoints",
+        "2e79950 Add sample seed data for local demonstrations",
+        "10a11b3 Add automated API tests with isolated database",
+        "4816579 Document project setup and deployment workflow",
+    ], "BodySmall"))
+    story.append(Paragraph("7. Reflection, Limitations, and Future Work", styles["Heading1"]))
+    story.append(Paragraph("A key challenge in this coursework was balancing simplicity with code quality. The final solution aims to remain understandable for academic demonstration while still including features that improve realism, such as custom error handling, timestamps, Docker support, and automated tests. There are still limitations. SQLite is appropriate for local coursework use, but a production-ready deployment would benefit from PostgreSQL. The current API also has no authentication or user-specific permissions. Future improvements could include JWT authentication, sorting parameters, database migrations with Alembic, and continuous integration.", styles["BodySmall"]))
+    story.append(Paragraph("8. Generative AI Use Statement", styles["Heading1"]))
+    story.append(Paragraph("Generative AI tools were used during the development and documentation process. AI assistance was used to help scaffold the FastAPI project structure, draft CRUD-oriented code patterns, suggest testing strategies, support documentation drafting, and help organise the repository workflow for submission. However, the final system was reviewed, run locally, tested, adjusted for environment-specific issues, and prepared for submission through deliberate manual verification. The student remained responsible for understanding the implementation, checking correctness, selecting which changes to keep, and making final submission decisions.", styles["BodySmall"]))
+    story.append(Paragraph("9. Conclusion", styles["Heading1"]))
+    story.append(Paragraph("In summary, the Task Management API meets the key coursework requirements by providing a working database-backed Web API with full CRUD support, JSON responses, correct HTTP methods, automatic OpenAPI documentation, and evidence of testing and version control. The additional features included in the final project strengthen the submission and demonstrate an effort to move beyond the minimum implementation threshold.", styles["BodySmall"]))
     doc.build(story)
 
 
@@ -124,42 +142,83 @@ def build_presentation():
     prs = Presentation()
     title_slide = prs.slides.add_slide(prs.slide_layouts[0])
     title_slide.shapes.title.text = "Task Management API"
-    title_slide.placeholders[1].text = "XJCO3011 Coursework 1\nStudent ID: 339919905"
+    title_slide.placeholders[1].text = "XJCO3011 Coursework 1\nStudent ID: 339919905\nFastAPI + SQLAlchemy + SQLite"
+
     slide = prs.slides.add_slide(prs.slide_layouts[1])
-    slide.shapes.title.text = "Project Overview"
+    slide.shapes.title.text = "Project Aim and Scope"
     tf = slide.placeholders[1].text_frame
-    tf.text = "A data-driven FastAPI Web API for managing tasks."
-    for text in ["SQLite used for local persistent storage.", "SQLAlchemy used as the ORM layer.", "Pydantic validates request and response data.", "Swagger /docs provides interactive API documentation."]:
+    tf.text = "Build a data-driven Web API that satisfies the coursework requirements."
+    for text in [
+        "One core resource: Task",
+        "Full CRUD support with database persistence",
+        "JSON responses, validation, and status codes",
+        "Interactive documentation through /docs and /redoc",
+    ]:
         p = tf.add_paragraph(); p.text = text; p.level = 1
+
     slide = prs.slides.add_slide(prs.slide_layouts[1])
-    slide.shapes.title.text = "System Architecture"
+    slide.shapes.title.text = "Architecture and Design"
     tf = slide.placeholders[1].text_frame
-    tf.text = "Client -> FastAPI routes -> SQLAlchemy ORM -> SQLite database"
-    for text in ["main.py starts the application and exception handlers.", "routers/items.py contains CRUD endpoint logic.", "database.py defines the Task model and session handling.", "schemas.py defines validated API payloads."]:
+    tf.text = "The system follows a simple but modular backend architecture:"
+    for text in [
+        "Client -> FastAPI routes -> SQLAlchemy ORM -> SQLite database",
+        "Pydantic validates request and response payloads",
+        "main.py configures middleware, exception handling, and startup",
+        "Routing, schemas, and database logic are separated into modules",
+    ]:
         p = tf.add_paragraph(); p.text = text; p.level = 1
+
     slide = prs.slides.add_slide(prs.slide_layouts[1])
-    slide.shapes.title.text = "Version Control Evidence"
+    slide.shapes.title.text = "Feature Set Delivered"
     tf = slide.placeholders[1].text_frame
-    tf.text = "Structured Git history demonstrates staged development:"
-    for text in ["8ca73e4 Initialize coursework API repository", "a06c6a7 Add database configuration and task schemas", "a7cf785 Implement CRUD task API endpoints", "2e79950 Add sample seed data for local demonstrations", "10a11b3 Add automated API tests with isolated database", "4816579 Document project setup and deployment workflow", "49b39ac Add submission report presentation and API documentation"]:
+    tf.text = "The API goes beyond the minimum CRUD requirement:"
+    for text in [
+        "Create, read, update, patch, and delete task records",
+        "Pagination using page and limit query parameters",
+        "Search and filter support on task listings",
+        "Timestamp fields for auditability",
+        "Standardized JSON error responses",
+    ]:
         p = tf.add_paragraph(); p.text = text; p.level = 1
+
     slide = prs.slides.add_slide(prs.slide_layouts[1])
-    slide.shapes.title.text = "API Features Demonstrated"
+    slide.shapes.title.text = "Evidence of Version Control"
     tf = slide.placeholders[1].text_frame
-    tf.text = "Implemented endpoints and enhanced API behaviour:"
-    for text in ["Complete CRUD for the Task resource", "Pagination using page and limit query parameters", "Search and filter support on task listings", "PATCH support for partial updates", "Standardized error responses and timestamps"]:
+    tf.text = "Git history shows a staged development process:"
+    for text in [
+        "8ca73e4 Initialize coursework API repository",
+        "a06c6a7 Add database configuration and task schemas",
+        "a7cf785 Implement CRUD task API endpoints",
+        "2e79950 Add sample seed data for local demonstrations",
+        "10a11b3 Add automated API tests with isolated database",
+        "4816579 Document project setup and deployment workflow",
+        "49b39ac Add submission report presentation and API documentation",
+        "5b7417f Refine submission assets and clean repository history",
+    ]:
         p = tf.add_paragraph(); p.text = text; p.level = 1
+
     slide = prs.slides.add_slide(prs.slide_layouts[1])
     slide.shapes.title.text = "Testing and Quality Assurance"
     tf = slide.placeholders[1].text_frame
-    tf.text = "Automated tests were implemented with pytest."
-    for text in ["10 automated tests pass successfully.", "TestClient used for endpoint verification.", "Temporary SQLite database isolates tests from development data.", "Covers CRUD, filtering, 404 handling, and validation errors."]:
+    tf.text = "Testing was used as evidence that the API is reliable."
+    for text in [
+        "pytest and FastAPI TestClient were used",
+        "10 automated tests cover core API behaviour",
+        "A temporary SQLite database isolates tests from development data",
+        "The suite covers CRUD, filtering, 404 responses, and validation errors",
+    ]:
         p = tf.add_paragraph(); p.text = text; p.level = 1
+
     slide = prs.slides.add_slide(prs.slide_layouts[1])
-    slide.shapes.title.text = "Reflection and Next Steps"
+    slide.shapes.title.text = "Reflection and Future Improvements"
     tf = slide.placeholders[1].text_frame
-    tf.text = "Project outcomes and future improvements:"
-    for text in ["The project satisfies the core Web API coursework requirements.", "AI assistance supported scaffolding, testing ideas, and documentation drafting.", "The final system was run, verified, and refined manually before submission.", "Future work: deploy to Render, add authentication, and migrate to PostgreSQL."]:
+    tf.text = "The project meets the core coursework goals and provides a solid backend foundation."
+    for text in [
+        "Strengths: modular structure, testing, documentation, and clear API behaviour",
+        "Limitation: SQLite is suitable for coursework but not ideal for higher-scale production use",
+        "Missing feature: authentication and user ownership of tasks",
+        "Future work: deploy to Render, add JWT auth, and migrate to PostgreSQL",
+    ]:
         p = tf.add_paragraph(); p.text = text; p.level = 1
     prs.save(str(DOCS / "Presentation_XJCO3011.pptx"))
 
