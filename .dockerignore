@@ -1,0 +1,9 @@
+# Ignore virtual environments, caches, SQLite database files, and test artifacts.
+venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+*.pyo
+*.pyd
+*.db
+.env
