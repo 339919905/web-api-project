@@ -1,0 +1,17 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# Test and tool caches
+.pytest_cache/
+
+# Local environments and secrets
+venv/
+.env
+
+# Local SQLite databases
+tasks.db
+test_tasks.db
+
+# OS/editor noise
+.DS_Store
