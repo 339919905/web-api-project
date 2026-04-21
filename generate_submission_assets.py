@@ -132,7 +132,7 @@ def build_report_pdf():
     story.append(Paragraph("7. Reflection, Limitations, and Future Work", styles["Heading1"]))
     story.append(Paragraph("A key challenge in this coursework was balancing simplicity with code quality. The final solution aims to remain understandable for academic demonstration while still including features that improve realism, such as custom error handling, timestamps, Docker support, and automated tests. There are still limitations. SQLite is appropriate for local coursework use, but a production-ready deployment would benefit from PostgreSQL. The current API also has no authentication or user-specific permissions. Future improvements could include JWT authentication, sorting parameters, database migrations with Alembic, and continuous integration.", styles["BodySmall"]))
     story.append(Paragraph("8. Generative AI Use Statement", styles["Heading1"]))
-    story.append(Paragraph("Generative AI tools were used during the development and documentation process. AI assistance was used to help scaffold the FastAPI project structure, draft CRUD-oriented code patterns, suggest testing strategies, support documentation drafting, and help organise the repository workflow for submission. However, the final system was reviewed, run locally, tested, adjusted for environment-specific issues, and prepared for submission through deliberate manual verification. The student remained responsible for understanding the implementation, checking correctness, selecting which changes to keep, and making final submission decisions.", styles["BodySmall"]))
+    story.append(Paragraph("Generative AI tools were used during the development and documentation process. AI assistance was used to help scaffold the FastAPI project structure, draft CRUD-oriented code patterns, suggest testing strategies, support documentation drafting, and help organise the repository workflow for submission. However, the final system was reviewed, run locally, tested, adjusted for environment-specific issues, and prepared for submission through deliberate manual verification. The student remained responsible for understanding the implementation, checking correctness, selecting which changes to keep, and making final submission decisions. Key AI conversation logs should be retained and provided as an appendix or accompanying evidence for the submission where required.", styles["BodySmall"]))
     story.append(Paragraph("9. Conclusion", styles["Heading1"]))
     story.append(Paragraph("In summary, the Task Management API meets the key coursework requirements by providing a working database-backed Web API with full CRUD support, JSON responses, correct HTTP methods, automatic OpenAPI documentation, and evidence of testing and version control. The additional features included in the final project strengthen the submission and demonstrate an effort to move beyond the minimum implementation threshold.", styles["BodySmall"]))
     doc.build(story)
@@ -194,6 +194,17 @@ def build_presentation():
         "4816579 Document project setup and deployment workflow",
         "49b39ac Add submission report presentation and API documentation",
         "5b7417f Refine submission assets and clean repository history",
+    ]:
+        p = tf.add_paragraph(); p.text = text; p.level = 1
+
+    slide = prs.slides.add_slide(prs.slide_layouts[1])
+    slide.shapes.title.text = "Version Control Screenshot Evidence"
+    tf = slide.placeholders[1].text_frame
+    tf.text = "Before the final presentation, this slide should include a screenshot of git log --oneline or the GitHub commits page."
+    for text in [
+        "Use the screenshot to show that version control was actively used.",
+        "Highlight repository setup, schema work, endpoint implementation, testing, and documentation.",
+        "This slide acts as direct evidence for the coursework version control requirement.",
     ]:
         p = tf.add_paragraph(); p.text = text; p.level = 1
 
